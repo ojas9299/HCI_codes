@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign Up and Login</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #f2f2f2;
+      }
+      .container {
+        width: 300px;
+        padding: 20px;
+        background-color: white;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        text-align: center;
+      }
+      h2 {
+        margin: 0 0 20px;
+      }
+      input[type="text"],
+      input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+      button {
+        width: 100%;
+        padding: 10px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #45a049;
+      }
+      .toggle-btn {
+        margin-top: 10px;
+        color: #333;
+        cursor: pointer;
+        font-size: 0.9em;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2 id="formTitle">Sign Up</h2>
+      <input type="text" id="username" placeholder="Username" required />
+      <input type="password" id="password" placeholder="Password" required />
+      <button onclick="handleFormSubmit()">Submit</button>
+      <p class="toggle-btn" onclick="toggleForm()">Switch to Login</p>
+      <p id="message" style="color: red; font-size: 0.9em"></p>
+    </div>
+
+    <script>
+      let isLogin = false;
+
+      function toggleForm() {
+        isLogin = !isLogin;
+        document.getElementById("formTitle").innerText = isLogin
+          ? "Login"
+          : "Sign Up";
+        document.querySelector(".toggle-btn").innerText = isLogin
+          ? "Switch to Sign Up"
+          : "Switch to Login";
+        document.getElementById("message").innerText = "";
+      }
+
+      function handleFormSubmit() {
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+        const messageElement = document.getElementById("message");
+
+        if (!username || !password) {
+          messageElement.innerText = "Please fill in all fields.";
+          return;
+        }
+
+        if (isLogin) {
+          // Login logic
+          const storedPassword = localStorage.getItem(username);
+          if (storedPassword === password) {
+            messageElement.style.color = "green";
+            messageElement.innerText = "Login successful!";
+          } else {
+            messageElement.style.color = "red";
+            messageElement.innerText =
+              "Login unsuccessful. Check your credentials.";
+          }
+        } else {
+          // Sign Up logic
+          if (localStorage.getItem(username)) {
+            messageElement.style.color = "red";
+            messageElement.innerText = "Username already exists.";
+          } else {
+            localStorage.setItem(username, password);
+            messageElement.style.color = "green";
+            messageElement.innerText =
+              "Sign Up successful! Please switch to login.";
+          }
+        }
+      }
+    </script>
+  </body>
+</html>
